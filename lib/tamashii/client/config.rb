@@ -1,16 +1,33 @@
 require 'tamashii/common'
 module Tamashii
   module Client
-    class Config < Tamashii::Config
-      register :log_file, STDOUT
+    class Config
+      class << self
+        def instance
+          @instance ||= Config.new
+        end
 
-      register :use_ssl, false
-      register :entry_point, ""
-      register :host, "localhost"
-      register :port, 3000
-      register :opening_timeout, 10
-      register :opening_retry_interval, 1
-      register :closing_timeout, 10
+        def respond_to_missing?(name, _all = false)
+          super
+        end
+
+        def method_missing(name, *args, &block)
+          return instance.send(name, *args, &block) if instance.respond_to?(name)
+          super
+        end
+      end
+
+      include Tamashii::Configurable
+
+      config :log_file, default: STDOUT
+
+      config :use_ssl, default: false
+      config :entry_point, default: ""
+      config :host, default: "localhost"
+      config :port, default: 3000
+      config :opening_timeout, default: 10
+      config :opening_retry_interval, default: 1
+      config :closing_timeout, default: 10
 
       def log_level(level = nil)
         return Client.logger.level if level.nil?

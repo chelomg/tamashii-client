@@ -1,3 +1,4 @@
+require "tamashii/config"
 require "tamashii/common"
 require "tamashii/client/version"
 require "tamashii/client/config"
@@ -7,7 +8,7 @@ module Tamashii
     autoload :Base, "tamashii/client/base"
 
     def self.config(&block)
-      return Config.class_eval(&block) if block_given?
+      return instance_exec(Config.instance, &block) if block_given?
       Config
     end
 
