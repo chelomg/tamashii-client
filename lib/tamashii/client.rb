@@ -1,3 +1,4 @@
+require "tamashii/hookable"
 require "tamashii/config"
 require "tamashii/common"
 require "tamashii/client/version"
@@ -18,4 +19,8 @@ module Tamashii
       end
     end
   end
+end
+
+Tamashii::Hook.after(:config) do |config|
+  config.register(:client, Tamashii::Client.config)
 end
