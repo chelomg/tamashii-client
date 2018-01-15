@@ -194,7 +194,7 @@ module Tamashii
       end
 
       def start_websocket_driver
-        @driver = WebSocket::Driver.client(self)
+        @driver = ::WebSocket::Driver.client(self)
         @driver.on :open, proc { |e|
           @opened = true
           logger.info "WebSocket Server opened"
